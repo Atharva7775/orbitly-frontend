@@ -100,7 +100,7 @@ function CheckoutInner() {
           <label className="field">CVC<input name="cvc" required inputMode="numeric" autoComplete="cc-csc" /></label>
         </fieldset>
         {error ? <p className="error">{error}</p> : null}
-        <button className="button" type="submit" disabled={submitting}>
+        <button className="button" type="submit" disabled={submitting || cart.items.length === 0}>
           {submitting ? "Placing order…" : "Place order"}
         </button>
       </form>
