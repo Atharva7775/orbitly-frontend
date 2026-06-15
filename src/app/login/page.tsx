@@ -18,7 +18,8 @@ function LoginInner() {
         mode="login"
         onSubmit={async ({ email, password }) => {
           await login({ email, password });
-          router.push(next);
+          // Only allow same-origin relative redirects.
+          router.push(next.startsWith("/") && !next.startsWith("//") ? next : "/catalog");
         }}
       />
       <p className="muted">
