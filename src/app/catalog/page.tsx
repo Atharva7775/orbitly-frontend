@@ -23,6 +23,8 @@ export default function CatalogPage() {
     };
   }, [query]);
 
+  const lastPage = data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1;
+
   return (
     <>
       <h1>Catalog</h1>
@@ -52,6 +54,27 @@ export default function CatalogPage() {
       <div className="grid">
         {data?.items.map((p) => <ProductCard key={p.id} product={p} />)}
       </div>
+      {data && lastPage > 1 ? (
+        <nav style={{ display: "flex", gap: 8, marginTop: 24 }}>
+          <button
+            className="button"
+            disabled={(query.page ?? 1) <= 1}
+            onClick={() => setQuery((q) => ({ ...q, page: (q.page ?? 1) - 1 }))}
+          >
+            Previous
+          </button>
+          <span className="muted">
+            Page {query.page} of {lastPage}
+          </span>
+          <button
+            className="button"
+            disabled={(query.page ?? 1) >= lastPage}
+            onClick={() => setQuery((q) => ({ ...q, page: (q.page ?? 1) + 1 }))}
+          >
+            Next
+          </button>
+        </nav>
+      ) : null}
     </>
   );
 }
