@@ -1,6 +1,7 @@
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from "axios";
 import { API_BASE, REQUEST_TIMEOUT_MS } from "./config";
 import { toApiError } from "./errors";
+import { getToken, clearToken } from "@/lib/session/tokenStore";
 
 interface RetryableConfig extends InternalAxiosRequestConfig {
   _retryCount?: number;
@@ -12,9 +13,13 @@ const RETRYABLE_STATUS = new Set([502, 503, 504]);
 export const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL ?? API_BASE,
   timeout: REQUEST_TIMEOUT_MS,
-  // Session cookie is set by POST /api/auth/login on the API origin.
-  withCredentials: true,
   headers: { Accept: "application/json" },
+});
+
+api.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) config.headers.set("Authorization", `Bearer ${token}`);
+  return config;
 });
 
 api.interceptors.response.use(
