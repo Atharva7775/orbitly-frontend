@@ -1,8 +1,8 @@
 "use client";
 
 import type { CartItem } from "@/lib/types";
-import { formatMoney } from "@/utils/money";
-import { lineTotal } from "@/utils/totals";
+import { formatMoney } from "@/lib/pricing/money";
+import { lineTotal } from "@/lib/pricing/totals";
 
 interface Props {
   item: CartItem;

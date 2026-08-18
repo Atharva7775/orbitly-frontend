@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { listOrders } from "@/lib/api/orders";
-import { formatMoney } from "@/utils/money";
+import { formatMoney } from "@/lib/pricing/money";
 import type { Order, Page } from "@/lib/types";
 
 export default function OrdersPage() {

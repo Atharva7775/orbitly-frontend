@@ -1,4 +1,4 @@
-import { formatMoney, type Cents } from "@/utils/money";
+import { formatMoney, type Cents } from "@/lib/pricing/money";
 
 interface Props {
   cents: Cents;

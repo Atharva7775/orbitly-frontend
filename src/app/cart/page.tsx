@@ -5,8 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import { CartLineItem } from "@/components/CartLineItem";
 import { OrderSummary } from "@/components/OrderSummary";
 import { getCart, removeCartItem, updateCartItem } from "@/lib/api/cart";
-import { findPromo } from "@/utils/discounts";
-import { computeTotals } from "@/utils/totals";
+import { findPromo } from "@/lib/pricing/discounts";
+import { computeTotals } from "@/lib/pricing/totals";
 import type { Cart } from "@/lib/types";
 
 export default function CartPage() {

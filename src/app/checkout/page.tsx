@@ -6,8 +6,8 @@ import { OrderSummary } from "@/components/OrderSummary";
 import { getCart } from "@/lib/api/cart";
 import { createOrder } from "@/lib/api/orders";
 import { payOrder, tokenizeCard } from "@/lib/api/payments";
-import { findPromo } from "@/utils/discounts";
-import { computeTotals } from "@/utils/totals";
+import { findPromo } from "@/lib/pricing/discounts";
+import { computeTotals } from "@/lib/pricing/totals";
 import type { Cart } from "@/lib/types";
 
 function CheckoutInner() {
