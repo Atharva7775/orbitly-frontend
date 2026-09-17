@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PriceTag } from "@/components/PriceTag";
+import { SizeGuide } from "@/components/SizeGuide";
 import { getProduct } from "@/lib/api/products";
 import { addToCart } from "@/lib/api/cart";
 import type { Product } from "@/lib/types";
@@ -36,6 +37,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         <PriceTag cents={product.priceCents} currency={product.currency} />
         <p>{product.description}</p>
         <p className="muted">SKU {product.sku}</p>
+        <SizeGuide slug={product.sku} />
         <label className="field" style={{ maxWidth: 120 }}>
           Quantity
           <input

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { OrderSummary } from "@/components/OrderSummary";
 import { getOrder } from "@/lib/api/orders";
-import { formatMoney } from "@/utils/money";
+import { formatMoney } from "@/lib/pricing/money";
 import type { Order } from "@/lib/types";
 
 export default function OrderDetailPage({ params }: { params: { id: string } }) {

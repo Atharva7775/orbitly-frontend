@@ -16,6 +16,7 @@ export interface Promo {
 export const KNOWN_PROMOS: Record<string, Promo> = {
   ORBIT10: { code: "ORBIT10", percentBps: 1000 },
   LAUNCH15: { code: "LAUNCH15", percentBps: 1500, minSubtotalCents: 5_000 },
+  SHIPFREE: { code: "SHIPFREE", amountOffCents: 599, minSubtotalCents: 3_500 },
 };
 
 export function findPromo(code: string | undefined): Promo | null {
