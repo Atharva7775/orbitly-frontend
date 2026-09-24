@@ -1,5 +1,5 @@
-import { formatMoney } from "@/utils/money";
-import type { Totals } from "@/utils/totals";
+import { formatMoney } from "@/lib/pricing/money";
+import type { Totals } from "@/lib/pricing/totals";
 
 export function OrderSummary({ totals, currency = "USD" }: { totals: Totals; currency?: string }) {
   const rows: [string, number][] = [

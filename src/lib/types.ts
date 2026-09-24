@@ -49,6 +49,13 @@ export interface Order {
   createdAt: string;
 }
 
+export interface LoginResponse {
+  accessToken: string;
+  tokenType: "bearer";
+  expiresAt: string;
+  user: User;
+}
+
 export interface Page<T> {
   items: T[];
   total: number;
