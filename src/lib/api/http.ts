@@ -46,6 +46,7 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
     if (res.status === 204) return undefined as T;
     const data: unknown = await res.json().catch(() => null);
     if (!res.ok) {
+      if (res.status === 401) clearToken();
       throw toApiError(res.status, data);
     }
     return data as T;
