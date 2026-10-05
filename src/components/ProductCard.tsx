@@ -11,6 +11,7 @@ export function ProductCard({ product }: { product: Product }) {
       ) : null}
       <h3 style={{ margin: "12px 0 4px" }}>{product.name}</h3>
       <PriceTag cents={product.priceCents} currency={product.currency} />
+      {product.stock === 0 ? <p className="muted">Out of stock</p> : null}
     </Link>
   );
 }
