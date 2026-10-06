@@ -36,6 +36,7 @@ api.interceptors.response.use(
       return api.request(config);
     }
 
+    if (status === 401) clearToken();
     return Promise.reject(toApiError(status, error.response?.data));
   },
 );
