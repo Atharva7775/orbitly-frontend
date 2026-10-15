@@ -1,5 +1,6 @@
 import { applyBps, type Cents } from "./money";
 import type { Promo } from "./discounts";
+import { tieredUnitPrice } from "./tiered";
 
 export interface PricedLine {
   unitPriceCents: Cents;
@@ -23,24 +24,29 @@ export const TAX_RATE_BPS: Record<string, number> = {
   NL: 2100,
 };
 
+/** Experimental: list price times quantity, before volume tiers. */
 export function lineTotal(line: PricedLine): Cents {
   return line.unitPriceCents * line.quantity;
 }
 
-export function computeTotals(lines: PricedLine[], promo: Promo | null, country = "US"): Totals {
-  const subtotalCents = lines.reduce((sum, l) => sum + lineTotal(l), 0);
+export function tieredLineTotal(line: PricedLine): Cents {
+  return tieredUnitPrice(line.unitPriceCents, line.quantity) * line.quantity;
+}
 
-  let discountCents = 0;
-  if (promo && subtotalCents >= (promo.minSubtotalCents ?? 0)) {
-    if (promo.percentBps) {
-      // Discount is applied per line so it can be shown next to each item.
-      discountCents = lines.reduce((sum, l) => sum + applyBps(lineTotal(l), promo.percentBps!), 0);
-    } else if (promo.amountOffCents) {
-      discountCents = Math.min(promo.amountOffCents, subtotalCents);
-    }
+export function computeTotals(lines: PricedLine[], promo: Promo | null, country = "US"): Totals {
+  const listSubtotal = lines.reduce((sum, l) => sum + lineTotal(l), 0);
+  const subtotalCents = lines.reduce((sum, l) => sum + tieredLineTotal(l), 0);
+  const tierSavings = listSubtotal - subtotalCents;
+
+  // Promos do not stack with volume tiers; the customer gets the better of the two.
+  let promoCents = 0;
+  if (promo && listSubtotal >= (promo.minSubtotalCents ?? 0)) {
+    if (promo.percentBps) promoCents = applyBps(listSubtotal, promo.percentBps);
+    else if (promo.amountOffCents) promoCents = Math.min(promo.amountOffCents, listSubtotal);
   }
 
-  const taxable = subtotalCents - discountCents;
+  const discountCents = Math.max(tierSavings, promoCents);
+  const taxable = listSubtotal - discountCents;
   const taxCents = applyBps(taxable, TAX_RATE_BPS[country] ?? 0);
-  return { subtotalCents, discountCents, taxCents, totalCents: taxable + taxCents };
+  return { subtotalCents: listSubtotal, discountCents, taxCents, totalCents: taxable + taxCents };
 }
