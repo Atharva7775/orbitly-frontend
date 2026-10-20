@@ -6,7 +6,7 @@ export type Cents = number;
 
 const formatters = new Map<string, Intl.NumberFormat>();
 
-export function formatMoney(cents: Cents, currency = "USD", locale = "en-US"): string {
+export function formatMoney(cents: Cents, currency = "EUR", locale = "en-GB"): string {
   const key = `${locale}:${currency}`;
   let fmt = formatters.get(key);
   if (!fmt) {
