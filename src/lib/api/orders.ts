@@ -32,3 +32,9 @@ export async function getOrder(id: string): Promise<Order> {
   const { data } = await api.get<Order>(`/api/orders/${id}`);
   return data;
 }
+
+/** Customers can cancel until the order is handed to the carrier. */
+export async function cancelOrder(id: string, reason: string): Promise<Order> {
+  const { data } = await api.post<Order>(`/api/orders/${id}/cancel`, { reason });
+  return data;
+}
