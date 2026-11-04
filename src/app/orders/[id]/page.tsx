@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { OrderSummary } from "@/components/OrderSummary";
-import { getOrder } from "@/lib/api/orders";
+import { OrderTimeline } from "@/components/OrderTimeline";
+import { cancelOrder, getOrder } from "@/lib/api/orders";
 import { formatMoney } from "@/lib/pricing/money";
 import type { Order } from "@/lib/types";
 
@@ -21,13 +22,14 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
   if (error) return <p className="error">{error}</p>;
   if (!order) return <p className="muted">Loading…</p>;
 
+  const cancellable = order.status === "pending" || order.status === "paid";
+
   return (
     <>
       {justPlaced ? <p className="card">Thanks! Your order has been placed.</p> : null}
       <h1>Order #{order.id.slice(0, 8)}</h1>
-      <p className="muted">
-        Placed {new Date(order.createdAt).toLocaleString()} · Status: {order.status}
-      </p>
+      <p className="muted">Placed {new Date(order.createdAt).toLocaleString()}</p>
+      <OrderTimeline status={order.status} />
       <ul>
         {order.lines.map((l) => (
           <li key={l.productId}>
@@ -36,6 +38,21 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         ))}
       </ul>
       <OrderSummary totals={order} currency={order.currency} />
+      {cancellable ? (
+        <button
+          className="button"
+          style={{ marginTop: 16 }}
+          onClick={async () => {
+            try {
+              setOrder(await cancelOrder(order.id, "customer_request"));
+            } catch (err) {
+              setError(err instanceof Error ? err.message : "Could not cancel the order");
+            }
+          }}
+        >
+          Cancel order
+        </button>
+      ) : null}
     </>
   );
 }
