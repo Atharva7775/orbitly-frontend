@@ -33,8 +33,9 @@ export function computeTotals(lines: PricedLine[], promo: Promo | null, country 
   let discountCents = 0;
   if (promo && subtotalCents >= (promo.minSubtotalCents ?? 0)) {
     if (promo.percentBps) {
-      // Discount is applied per line so it can be shown next to each item.
-      discountCents = lines.reduce((sum, l) => sum + applyBps(lineTotal(l), promo.percentBps!), 0);
+      // Round once on the subtotal. Rounding each line and summing drifted by up
+      // to 1 cent per line and disagreed with the backend total (support #4127).
+      discountCents = applyBps(subtotalCents, promo.percentBps);
     } else if (promo.amountOffCents) {
       discountCents = Math.min(promo.amountOffCents, subtotalCents);
     }
