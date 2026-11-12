@@ -22,6 +22,7 @@ export function Header() {
         <Link href="/cart">Cart</Link>
         {signedIn ? (
           <>
+            <Link href="/wishlist">Wishlist</Link>
             <Link href="/orders">Orders</Link>
             <Link href="/account">Account</Link>
           </>
