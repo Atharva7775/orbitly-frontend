@@ -33,3 +33,8 @@ removed; see the backend migration `004_token_sessions.sql`.
 
 `.github/workflows/deploy.yml` builds `ghcr.io/<owner>/orbitly-frontend:<sha>` and rolls the
 `orbitly-frontend` deployment defined in `orbitly-cloud/k8s/`.
+
+## Rounding
+
+Percentage discounts are computed on the subtotal and rounded once (half up, in
+cents). Never round per line and sum; see `src/lib/pricing/totals.ts`.
